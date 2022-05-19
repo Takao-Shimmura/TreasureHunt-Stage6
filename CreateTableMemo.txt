@@ -1,0 +1,62 @@
+以下はSQLコマンド
+「DB browser for SQLite」 を起動させ、
+sqlite3ファイルを開き、「SQL実行」タブ内に書き込んで、再生ボタン▷を押すと、一気にテーブルを生成してくれる
+CREATE TABLE "mydata" (
+    "input_id" INTEGER NOT NULL,
+    "user_id" INTEGER NOT NULL,
+    "group" VARCHAR(255),
+    "name" VARCHAR(255),
+    "input_key" VARCHAR(255),
+    "current_stage" VARCHAR(255),
+    "time_stamp" VARCHAR(255),
+    PRIMARY KEY("input_id")
+);
+
+CREATE TABLE "user" (
+    "user_id" INTEGER NOT NULL,
+    "group" VARCHAR(255),
+    "name" VARCHAR(255),
+    "st1_finish_timestamp" VARCHAR(255),
+    "st2_finish_timestamp" VARCHAR(255),
+    "st3_finish_timestamp" VARCHAR(255),
+    "st4_finish_timestamp" VARCHAR(255),
+    "st5_finish_timestamp" VARCHAR(255),
+    "st6_finish_timestamp" VARCHAR(255),    
+    PRIMARY KEY("user_id")
+);
+
+CREATE TABLE "stage_key" (
+    "stage" INTEGER NOT NULL,
+    "key" VARCHAR(255),
+    PRIMARY KEY("stage")
+);
+
+
+【heroku へ　デプロイするやり方】
+ログイン
+ コマンドプロンプト内でheroku login 
+
+ データベースにアクセス
+heroku pg:psql --app receipt-summarytable-builder
+
+
+以下はSQLコマンド。文頭のSQLiteではなくPostgreSQL用に書き換える
+https://www.i-ryo.com/entry/2020/10/25/173932
+を参考に、INTEGERをSERIALに書き換える
+
+
+テーブルにCSVデータをインポートするコマンド
+\copy insurerdata from 'C:\Py\FlaskSampleP68\flask_Ahaki_Receipt_SummaryTable_builder_app/insurerdata.csv' with csv encoding 'utf8' Header
+\copy search from 'C:\Py\FlaskSampleP68\flask_Ahaki_Receipt_SummaryTable_builder_app/search.csv' with csv encoding 'utf8' Header
+
+テーブルのオブジェクトごと削除コマンド
+DROP TABLE "mydata";
+DROP TABLE "user";
+DROP TABLE "stage_key";
+
+テーブルのデータすべて削除コマンド
+DELETE FROM "mydata";
+DELETE FROM "user";
+DELETE FROM "stage_key";
+
+

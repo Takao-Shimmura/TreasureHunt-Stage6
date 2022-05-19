@@ -1,0 +1,21 @@
+{
+    // IntelliSense を使用して利用可能な属性を学べます。
+    // 既存の属性の説明をホバーして表示します。
+    // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+       
+       
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "internalConsole",
+            "stopOnEntry": false
+            /*デバッグモードで実行した時に、最初の一行で
+            　止まらないようにするために、stopOnEntryはfalseにしておく
+            　参考　https://jpdebug.com/p/1548199*/
+        }
+    ]
+}
