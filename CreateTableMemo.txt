@@ -55,7 +55,7 @@ CREATE TABLE "mydata" (
     PRIMARY KEY("input_id")
 );
 
-CREATE TABLE "user" (
+CREATE TABLE "userid" (
     "user_id" SERIAL NOT NULL,
     "group" VARCHAR(255),
     "name" VARCHAR(255),
@@ -64,7 +64,7 @@ CREATE TABLE "user" (
     "st3_finish_timestamp" VARCHAR(255),
     "st4_finish_timestamp" VARCHAR(255),
     "st5_finish_timestamp" VARCHAR(255),
-    "st6_finish_timestamp" VARCHAR(255),    
+    "st6_finish_timestamp" VARCHAR(255),
     PRIMARY KEY("user_id")
 );
 
@@ -78,9 +78,9 @@ CREATE TABLE "stage_key" (
 テーブルにCSVデータをインポートするコマンド
 
 
-\copy mydata from'C:\Py\FlaskSampleP68\flask_TreasureHunting_PostgreSQL_app/mydata.csv' with csv encoding 'utf8' Header
-\copy stage_key from'C:\Py\FlaskSampleP68\flask_TreasureHunting_PostgreSQL_app/stage_key.csv' with csv encoding 'utf8' Header
-\copy user from'C:\Py\FlaskSampleP68\flask_TreasureHunting_PostgreSQL_app/user.csv' with csv encoding 'utf8' Header
+\copy mydata from 'C:\Py\FlaskSampleP68\flask_TreasureHunting_PostgreSQL_app/mydata.csv' with csv encoding 'utf8' Header
+\copy stage_key from 'C:\Py\FlaskSampleP68\flask_TreasureHunting_PostgreSQL_app/stage_key.csv' with csv encoding 'utf8' Header
+\copy user from 'C:\Py\FlaskSampleP68\flask_TreasureHunting_PostgreSQL_app/user.csv' with csv encoding 'utf8' Header
 
 
 テーブルのオブジェクトごと削除コマンド

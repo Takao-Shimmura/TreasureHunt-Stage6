@@ -41,7 +41,7 @@ def login_post():
     
     group=request.form.get('group_name')
     nameid=request.form.get('name_id')
-    tablename='user'
+    tablename='userid'
     pprint.pprint('group.app={}'.format(group+','+nameid))
     #dic1=get_data_from_table_object(group)
     res=get_data_from_table_object(group,nameid,tablename,)

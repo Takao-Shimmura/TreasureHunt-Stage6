@@ -36,7 +36,7 @@ Base=declarative_base()
 class Mydata(Base):
     __tablename__='mydata'
     input_id=Column(Integer,primary_key=True, autoincrement=True)
-    #user_id=Column(Integer),ForeignKey('user.user_id')
+    #user_id=Column(Integer),ForeignKey('userid.user_id')
     user_id=Column(Integer)
     group=Column(String(255))
     name=Column(String(255))
@@ -85,8 +85,8 @@ class Mydata(Base):
             if key1 in keyList:
                 setattr(self, key1, value)
 
-class User(Base):
-    __tablename__='user'
+class Userid(Base):
+    __tablename__='userid'
 
     user_id=Column(Integer,primary_key=True, autoincrement=True)
     group=Column(String(255))
@@ -142,9 +142,9 @@ def get_data_from_table_object(gr,nm,tbnm):
     Session = sessionmaker(bind=engine)
     ses = Session()
     #pprint.pprint('group_name,name.myutil={}'.format(gr+','+nm))
-    if tbnm=='user':
+    if tbnm=='userid':
         try:
-            user_datum = ses.query(User).filter(User.group==gr , User.name==nm).one()
+            user_datum = ses.query(Userid).filter(Userid.group==gr , Userid.name==nm).one()
             # mydata テーブルのデータが、groupごとにセレクトできるようになっていない⇒要改良
             res = user_datum.to_dict()
         except NoResultFound:
@@ -175,18 +175,18 @@ def get_by_list(arr):
         res.append(item.to_dict())
     return res 
 
-#User テーブルから、user_idに一致するレコードを取り、辞書形式で返す関数
+#Userid テーブルから、user_idに一致するレコードを取り、辞書形式で返す関数
 def get_data_from_user_table(user_id):
     Session = sessionmaker(bind=engine)
     ses = Session()
-    user_datum = ses.query(User).filter(User.user_id==user_id).one()
+    user_datum = ses.query(Userid).filter(Userid.user_id==user_id).one()
     # mydata テーブルのデータが、groupごとにセレクトできるようになっていない⇒要改良
     res = user_datum.to_dict()    
     ses.close()# 終わったら必ずセッションを閉じておかないと、SQLalchemy内でのエラーが出る（それでも動作は完遂してくれるが）
     return res
 
 # フォームで入力された内容を、Mydataテーブルに更新するプロシージャ
-#　user_idをもとに、Userテーブルからいちいちgroup,nameを調べ上げてMydata
+#　user_idをもとに、Useridテーブルからいちいちgroup,nameを調べ上げてMydata
 #  に、入力している
 def post_msg_to_sql(user_id,msg,now_timestamp):
     user_datum = get_data_from_user_table(user_id)
