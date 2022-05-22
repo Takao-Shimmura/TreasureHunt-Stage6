@@ -16,18 +16,11 @@ import pprint
 import copy #　リストや辞書などのミュータブル（更新可能）オブジェクトをコピーする際に必要
 # ↑　参照　https://note.nkmk.me/python-copy-deepcopy/
 
-from sqlalchemy import create_engine, Column, Integer, String, \
-    Text, DateTime, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, relationship
-from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.sql.elements import Null
 
 from myutil import get_data_test,get_data_from_table_object,post_msg_to_sql
 
 app=Flask(__name__)
-engine=create_engine('sqlite:///sample.sqlite3')
-Base=declarative_base()
+
 
 app.secret_key = b'random shimmura code'
 

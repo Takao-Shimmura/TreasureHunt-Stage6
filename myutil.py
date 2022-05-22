@@ -23,10 +23,10 @@ from sqlalchemy.orm.exc import NoResultFound
 # ※ただし、割り当てられたURIそのままでは接続エラー
 #　「postgres://・・・」から「postgresql://・・・」に変更しなければ解消されない
 #参考（heroku公式リファレンス）⇒Why is SQLAlchemy 1.4.x not connecting to Heroku Postgres? - Heroku Help
-###engine = create_engine('postgresql://qrnkdpytaiifps:7b728dc1e568e2d1c1ab80c919e17d10c7f41f8d853c8e5989d907c978bf8d8c@ec2-34-250-16-127.eu-west-1.compute.amazonaws.com:5432/d77prcb2vt5pne')
+engine = create_engine('postgresql://gnxzzavntcwtpn:2d7224a390d7ea18712db3c0d3d5a676b8255452aae23bd2dd920c4a95da2a37@ec2-52-3-2-245.compute-1.amazonaws.com:5432/dib5jng6kbpqr')
 
 #　↓　ローカルのSQLite接続用パス 
-engine = create_engine('sqlite:///treasurehuntdb.sqlite3')
+###engine = create_engine('sqlite:///treasurehuntdb.sqlite3')
 
 
 # base model
