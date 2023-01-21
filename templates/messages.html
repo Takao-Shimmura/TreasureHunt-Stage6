@@ -2,7 +2,8 @@
 
 {% block title%}
 
-経絡経穴概論　Treasure Hunting
+
+宝探しゲーム　経絡経穴概論
 {% endblock%}
 
 {% block headline%}
@@ -33,22 +34,26 @@
         <a href="javascript:void(0)"
         v-on:click="in_out_check">{{in_out}}</a>
     </div>
+    
     <div class="alert alert-success p-1">
-        <h5>{{alert_msg}}</h5>
+        <div v-if="!(login_name=='admin')">
+            <h5>{{alert_msg}}</h5>
+        </div>
+        <div v-else>
+            <h5>管理者画面</h5>
+        </div>   
     </div>
 
     <!--入力　掲示パネル-->
-    <div class="card">
-        <div class="card-header">
-            <div v-if="login_flg">
+    <div v-if="login_flg">
+        <div class="card">
+            <div class="card-header">
+            
+
                 <div v-if="login_name=='admin'">
                     <div class="card mt-4">
                         <div class="card-body">
-                            <div class="form-group">
-                                <button v-on:click="postMsg"
-                                    class="btn btn-primary col-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
-                                    入力履歴更新</button>
-                            </div>
+                            
                             <div class="form-group">
                                 <button v-on:click="delMsg"
                                     class="btn btn-primary col-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
@@ -57,20 +62,53 @@
                         </div>
                     </div>
                 </div>
+
                 <div v-else>
-                    <h5 class="mt-4">
-                        👇全角カタカナで入力
-                    </h5>
-                    <div class="card mt-4">
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="comment">入力欄</label>
-                                <div class="row">
-                                <input type="text"  class="form-control col" 
-                                    id="comment" name="comment" v-model="post_msg">
-                                <button v-on:click="postMsg"
-                                    class="btn btn-primary col-5 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                                    送信/更新</button>
+                    <div v-if="!(current_stege==6)">
+                        <div v-if="current_stege==7">
+                            <h5 class="mt-4">
+                                🌸全ステージクリア👏
+                            </h5>
+                        </div>
+                        <div v-else>
+                            <h5 class="mt-4">
+                                👇3桁の数字を入力（半角数字で）
+                            </h5>
+                        </div>
+                    </div>
+                    <div v-else-if="current_stege==6">
+                        <h5 class="mt-4">
+                            👇カギを入力（全角カタカナで）
+                        </h5>
+                    </div>
+
+                    <div v-if="!(current_stege==7)">
+                        <!-- ↑　全ステージをクリアしたら、入力フォームが消える -->
+                        <div v-if="inputform_show == 'True'">
+                            <!-- ↑　ハズレたら、入力フォームが消える -->
+                            <div class="card mt-4">
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="comment">入力欄</label>
+                                        <div class="row">
+                                        <input type="text"  class="form-control col" 
+                                            id="comment" name="comment" v-model="post_msg">
+                                        <button v-on:click="postMsg"
+                                            class="btn btn-primary col-5 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                            送信/更新</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div v-if="!(inputform_show == 'True')">
+                            <!-- ↑　ハズレたら、入力フォームが再開されるまでカウントダウン -->
+                            <div class="card mt-4">
+                                <div class="card-body">
+                                    <div class="alert alert-success p-1">
+                                        <h5>{{hazure_countdown_msg}}</h5>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -78,17 +116,18 @@
                 </div>
             </div>
         </div>
-        <div class="card-body">
-            <div v-if="login_flg">
+         <div v-if="login_flg">
+            <div class="card-body">
+           
                 <h5 class="p-3 h5 text-center">
                     *入力履歴*
                 </h5>
                 <ul class="list-group list-group-flush">
-                    <div v-if="login_name =='admin'">　
+                    <div v-if="login_name =='admin'">
                         <li v-for="item in msg_data"
                         class=" list-group-item">
                             <!-- ↑　login_nameがadminだった時には、履歴のすべてを表示 -->
-                            {{item[1]}}({{item[0]}})
+                            {{item['input_key']}}    【{{item['name']}}】
                         </li>
                     </div>
                     <div v-else>
@@ -123,14 +162,14 @@
                             <label for="group">チーム名</label>
                             <input type="text"  class="form-control " id="group_input" name="group_input" v-model="group_name">
                             <small class="form-text text-muted">
-                                ※チーム名を半角大文字で入力
+                                ※チーム名（英字）を半角大文字で入力
                             </small>
                         </div>
                         <div class="form-group">
                             <label for="group">名前</label>
                             <input type="text"  class="form-control " id="name_input" name="name_input" v-model="name_id">
                             <small class="form-text text-muted">
-                                ※名前を半角小文字で入力
+                                ※名字（姓）を漢字で入力
                             </small>
                         </div>
                         <div class="form-group">
@@ -172,14 +211,20 @@
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">
-                            正解 チーム{{form_msg}}　全ステージ　クリア！
+                            {{form_msg}}
                         </h4>
                     </div>
                     <div class="card-body">
-                        <img class="card-img" src="/static/TreasureBoxOpen.gif">
+                        <!--　↓　src= の参照部分のURL内に、Vue.js内で定義した変数「current_stege」を入れ込んで
+                        　　    動的なURLにしたい場合は、{{current_stege}}と括る必要はなく、
+                                固定のURL部分を文字列としてシングルクォートで括り、そこに＋記号で「current_stege」を入れ込む
+                                さらに、src= に、明示的に「v-bind:」と接頭語をつける（省略可）
+                                参照⇒https://www.web-dev-qa-db-ja.com/ja/javascript/vuejs-img-src%E5%A4%89%E6%95%B0%E3%81%A8%E3%83%86%E3%82%AD%E3%82%B9%E3%83%88%E3%82%92%E9%80%A3%E7%B5%90%E3%81%99%E3%82%8B/827523891/
+                        -->
+                        <img class="card-img" v-bind:src="'/static/TreasureBoxOpen'+current_stege_for_treasurebox+'.gif'">
                     </div>
                     <div class="form-group">
-                        <button class="btn btn=primary" v-on:click="closeTresureBox">閉じる</button>
+                        <button class="btn btn=primary" v-on:click="closeTreasureBox">閉じる</button>
                     </div>
                 </div>
             </div>   
@@ -199,6 +244,16 @@
     /*↓↓　Vue内のfunctionを終えるたびに消されてしまうので、ここで宣言しておく　*/
     /*↓↓　参照　　https://techacademy.jp/magazine/5537　*/
 var intervalID
+    /*　↓↓　ハズレだった時に30秒間　入力フォームを隠す。
+    参考　https://www.nishishi.com/javascript-tips/temp-box-settimeout.html
+    変数「inputFormShowTimerID」は、そのためだけに用意した変数*/
+var inputFormShowTimerID
+    /*　↓↓　ハズレだった時に30秒間　入力フォームを隠している間にカウントダウンを表示する。
+    参考　https://www.nishishi.com/javascript-tips/setinterval-passage.html
+    変「countDownID」と「countDownSec」は、そのためだけに用意した変数*/
+var countDownID
+var countDownSec
+
 //message_board object
 Vue.component('message_board',{
     template:'#message_board-template',
@@ -218,6 +273,11 @@ Vue.component('message_board',{
                 msg_data:[],
                 form_msg:'',
                 seikai_flg:'',
+                current_stege:'',
+                cleared_user_name:'',
+                inputform_show:'True',
+                current_stege_for_treasurebox:'',
+                hazure_countdown_msg:'',
         }
     },
     methods:{
@@ -246,12 +306,12 @@ Vue.component('message_board',{
             $('#Hazure').modal('hide');
         },
         //show TreasureBox dialog
-        showTresureBox:function(){
+        showTreasureBox:function(){
             this.seikai_flg='';
             $('#TreasureBox').modal('show');
         },
         //hide TreasureBox dialog
-        closeTresureBox:function(){
+        closeTreasureBox:function(){
             $('#TreasureBox').modal('hide');
         },
         //access server and logined
@@ -273,7 +333,8 @@ Vue.component('message_board',{
                     self.login_name=Data[1];
                     self.group_name=Data[2];
                     self.login_id=Data[3];
-                    self.alert_msg='※ログインしました！';
+                    self.current_stege=Data[4];
+                    self.alert_msg='※ログインしました！ 現在　第'+self.current_stege+'ステージです';
                     /* self.group_name=''; */
                     $('#login').modal('hide');
                     self.getMsg();
@@ -329,10 +390,28 @@ Vue.component('message_board',{
                 self.seikai_flg=DAT[1]
                if(DAT[0]== 'True' &&  self.seikai_flg=='hazure' ) {    
                     self.alert_msg ='不正解！';
-                    self.seikai_flg='';
-                    self.showHazure();      
-                    self.getMsg();  
-                }else if(DAT[0]== 'True' && self.seikai_flg=='atari' ) {     
+                    /* ↓　非同期処理がしっかり終わってから、showHazureが開くように、promiseによるコールバック関数を使う */
+                    new Promise (resolve =>{
+                            self.seikai_flg='';
+                            resolve();
+                        }).then(()=>self.showHazure());
+                
+                    self.getMsg(); 
+                    /*　↓↓　ハズレだった時に30秒間　入力フォームを隠す。
+                    参考　https://www.nishishi.com/javascript-tips/temp-box-settimeout.html
+                    上記URLの中の「▼処理内容を無名関数で記述する書き方」を参考にした。
+                    変数「inputFormShowTimerID」は、そのためだけに用意した変数*/
+                    self.inputform_show = 'False';
+                    inputFormShowTimerID = setTimeout(function(){self.inputform_show = 'True'},30000);
+                    countDownSec= 30;
+                    countDownID = setInterval(function(){
+                                countDownSec--;
+                                self.hazure_countdown_msg="シンキングタイム　"+countDownSec+"秒後に入力できます";
+                                },1000);
+                    setTimeout(function(){clearInterval(countDownID)},30000);
+                    
+                   
+                }else if(DAT[0]== 'True' && self.seikai_flg=='' ) {     
                     self.getMsg();  
                     }
             },
@@ -378,7 +457,14 @@ Vue.component('message_board',{
 
                 success: function (DATA) {
                     /* console.log(DATA); */ 
-                    self.msg_data = DATA.reverse();
+                    self.msg_data = DATA[0].reverse();
+                    self.seikai_flg= DATA[1];
+                    self.current_stege=DATA[2];
+                    if(self.current_stege ==7){
+                            self.alert_msg='ゴール！';
+                        }
+                        else{self.alert_msg='現在　第'+self.current_stege+'ステージです';};
+                    
                     
                 
                     if(self.seikai_flg=='atari' ) {     
@@ -386,14 +472,33 @@ Vue.component('message_board',{
                         self.seikai_flg='';
                         /* console.log(DATA[0]['group']);
                         console.log(self.group_name); */
-                        self.alert_msg = '※全ステージ クリア！';
+                        /* ↓　送られてきたcurrent_stegeのNoを、-1して変数current_stege_for_treasureboxに入れておく
+                        （treasureboxダイアログが10秒ごとに更新されるときに、次のステージのNoにならないように） */
+                        self.current_stege_for_treasurebox=String(parseFloat(self.current_stege)-1)
+                        self.cleared_user_name=DATA[3];
+                        /* ↓　非同期処理がしっかり終わってから、showTreasureboxが開くように、promiseによるコールバック関数を使う */
+                        new Promise (resolve =>{
+                            if(self.current_stege ==7){
+                                self.form_msg = self.cleared_user_name+'さんが　全ステージ クリア！';
+                            }
+                            else{self.form_msg = self.cleared_user_name+'さんが　第'+self.current_stege_for_treasurebox+'ステージ クリア！';};
+                            
+                          resolve();
+                        }).then(()=>self.showTreasureBox());
+                        
+                        /*↓↓　全ステージをクリアした時に
+                        clearIntervalによって、setIntervalによるデータの自動更新をストップさせる　*/
+                        /*↓↓　参照　　https://techacademy.jp/magazine/5537　*/
+                        if(self.current_stege==7){ 
+                            clearInterval(intervalID);
+                        }
                         /* self.form_msg = DATA[0][0];
                         && DATA[0]['group'] == self.group_name  */
                         
-                        /* if(self.seikai_flg){ */
-                        self.showTresureBox();
-                        /* }
-                        self.showTresureBox(); */
+                        
+                        
+                        /* 
+                        self.showTreasureBox(); */
                     };
                     
                 },
@@ -401,7 +506,8 @@ Vue.component('message_board',{
                     self.alert_msg = '※メッセージ送信に問題が発生しました。';
                 }
             });
-        } 
+        },
+
     },    
 });
 //start Vue.

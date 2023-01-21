@@ -12,7 +12,7 @@ CREATE TABLE "mydata" (
     PRIMARY KEY("input_id")
 );
 
-CREATE TABLE "user" (
+CREATE TABLE "userid" (
     "user_id" INTEGER NOT NULL,
     "group" VARCHAR(255),
     "name" VARCHAR(255),
@@ -38,6 +38,8 @@ CREATE TABLE "stage_key" (
 
  データベースにアクセス
 heroku pg:psql --app treasure-hunt-acupoint
+データベースへのアクセスを切断
+\q
 
 
 以下はSQLコマンド。文頭のSQLiteではなくPostgreSQL用に書き換える
@@ -80,17 +82,17 @@ CREATE TABLE "stage_key" (
 
 \copy mydata from 'C:\Py\FlaskSampleP68\flask_TreasureHunting_PostgreSQL_app/mydata.csv' with csv encoding 'utf8' Header
 \copy stage_key from 'C:\Py\FlaskSampleP68\flask_TreasureHunting_PostgreSQL_app/stage_key.csv' with csv encoding 'utf8' Header
-\copy user from 'C:\Py\FlaskSampleP68\flask_TreasureHunting_PostgreSQL_app/user.csv' with csv encoding 'utf8' Header
+\copy userid from 'C:\Py\FlaskSampleP68\flask_TreasureHunting_PostgreSQL_app/userid.csv' with csv encoding 'utf8' Header
 
 
 テーブルのオブジェクトごと削除コマンド
 DROP TABLE "mydata";
-DROP TABLE "user";
+DROP TABLE "userid";
 DROP TABLE "stage_key";
 
 テーブルのデータすべて削除コマンド
 DELETE FROM "mydata";
-DELETE FROM "user";
+DELETE FROM "userid";
 DELETE FROM "stage_key";
 
 
