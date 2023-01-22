@@ -234,10 +234,10 @@ def post_msg_to_sql(user_id,msg,str_timestamp,stage,seikai_flg):
     dict_msg['group']=group
     now_timestamp=datetime.datetime.fromisoformat(str_timestamp)
     if seikai_flg=='':
-        dict_msg['name']=name+'／クリア🌸'+'／第'+stage+'ステージ／'+str(now_timestamp.hour).zfill(2)+':' \
+        dict_msg['name']=name+'/'+group+'チーム／クリア🌸'+'／第'+stage+'ステージ／'+str(now_timestamp.hour).zfill(2)+':' \
              + str(now_timestamp.minute).zfill(2) 
     else:
-        dict_msg['name']=name+'／ハズレ😞'+'／第'+stage+'ステージ／'+str(now_timestamp.hour).zfill(2)+':' \
+        dict_msg['name']=name+'/'+group+'チーム／ハズレ😞'+'／第'+stage+'ステージ／'+str(now_timestamp.hour).zfill(2)+':' \
              + str(now_timestamp.minute).zfill(2) 
 
     dict_msg['user_id']=user_id

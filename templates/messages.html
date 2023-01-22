@@ -35,7 +35,7 @@
         v-on:click="in_out_check">{{in_out}}</a>
     </div>
     
-    <div class="alert alert-success p-1">
+    <div class="alert alert-success p-1 ">
         <div v-if="!(login_name=='admin')">
             <h5>{{alert_msg}}</h5>
         </div>
@@ -44,77 +44,95 @@
         </div>   
     </div>
 
+
     <!--入力　掲示パネル-->
     <div v-if="login_flg">
         <div class="card">
             <div class="card-header">
-            
 
-                <div v-if="login_name=='admin'">
-                    <div class="card mt-4">
-                        <div class="card-body">
-                            
-                            <div class="form-group">
-                                <button v-on:click="delMsg"
-                                    class="btn btn-primary col-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
-                                    入力履歴削除</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                
 
-                <div v-else>
-                    <div v-if="!(current_stege==6)">
-                        <div v-if="current_stege==7">
-                            <h5 class="mt-4">
-                                🌸全ステージクリア👏
-                            </h5>
-                        </div>
-                        <div v-else>
-                            <h5 class="mt-4">
-                                👇3桁の数字を入力（半角数字で）
-                            </h5>
-                        </div>
-                    </div>
-                    <div v-else-if="current_stege==6">
-                        <h5 class="mt-4">
-                            👇カギを入力（全角カタカナで）
-                        </h5>
-                    </div>
-
-                    <div v-if="!(current_stege==7)">
-                        <!-- ↑　全ステージをクリアしたら、入力フォームが消える -->
-                        <div v-if="inputform_show == 'True'">
-                            <!-- ↑　ハズレたら、入力フォームが消える -->
+                        <div v-if="login_name=='admin'">
                             <div class="card mt-4">
                                 <div class="card-body">
+                                    
                                     <div class="form-group">
-                                        <label for="comment">入力欄</label>
-                                        <div class="row">
-                                        <input type="text"  class="form-control col" 
-                                            id="comment" name="comment" v-model="post_msg">
-                                        <button v-on:click="postMsg"
-                                            class="btn btn-primary col-5 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                                            送信/更新</button>
+                                        <button v-on:click="delMsg"
+                                            class="btn btn-primary col-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+                                            入力履歴削除</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div v-else>
+                            <div v-if="!(current_stege==6)">
+                                <div v-if="current_stege==7">
+                                    <h5 class="mt-4">
+                                        🌸全ステージクリア👏
+                                    </h5>
+                                </div>
+                                <div v-else>
+                                    <h5 class="mt-4">
+                                        👇3桁の数字を入力（半角数字で）
+                                    </h5>
+                                </div>
+                            </div>
+                            <div v-else-if="current_stege==6">
+                                <h5 class="mt-4">
+                                    👇カギを入力（全角カタカナで）
+                                </h5>
+                            </div>
+
+                            <div v-if="!(current_stege==7)">
+                                <!-- ↑　全ステージをクリアしたら、入力フォームが消える -->
+                                <div v-if="inputform_show == 'True'">
+                                    <!-- ↑　ハズレたら、入力フォームが消える -->
+                                    <div class="card mt-4 ">
+                                        <div class="card-body ">
+                                            
+                                                
+                                                    <!-- ↓　自作のCSSは　layout.htmlファイルのなかの<head></head>内に設定してある「haikei_css_jisaku」 -->
+                                                    <div class="form-group haikei_css_jisaku">
+                                                        
+
+                                                        <label for="comment">入力欄</label>
+                                                            <div class="row m-5">
+                                                                <div class="col-2">
+                                                                </div>
+                                                            <input type="text"  class="form-control col" 
+                                                                id="comment" name="comment" v-model="post_msg">
+                                                            <button v-on:click="postMsg"
+                                                                class="btn btn-primary col-3 col-sm-2 col-md-3 col-lg-4 col-xl-4">
+                                                                送信</button>
+                                                            </div>
+                                                        
+
+                                                        
+                                                    </div>
+                                                
+                                            
+                         
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div v-if="!(inputform_show == 'True')">
+                                    <!-- ↑　ハズレたら、入力フォームが再開されるまでカウントダウン -->
+                                    <div class="card mt-4">
+                                        <div class="card-body">
+                                            <div class="alert alert-success p-1">
+                                                <h5>{{hazure_countdown_msg}}</h5>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div v-if="!(inputform_show == 'True')">
-                            <!-- ↑　ハズレたら、入力フォームが再開されるまでカウントダウン -->
-                            <div class="card mt-4">
-                                <div class="card-body">
-                                    <div class="alert alert-success p-1">
-                                        <h5>{{hazure_countdown_msg}}</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
+
+        </div>
         </div>
          <div v-if="login_flg">
             <div class="card-body">
