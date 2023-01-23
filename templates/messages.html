@@ -69,7 +69,7 @@
                             <div v-if="!(current_stege==6)">
                                 <div v-if="current_stege==7">
                                     <h5 class="mt-4">
-                                        🌸全ステージクリア👏
+                                        🌸全ステージクリア🌸
                                     </h5>
                                 </div>
                                 <div v-else>
@@ -210,7 +210,7 @@
                         </h4>
                     </div>
                     <div class="card-body">
-                        <img class="card-img" src="/static/hazure_001.gif">
+                        <img class="card-img" src="/static/hazure_001.gif?20230123">
                     </div>
                     <div class="form-group">
                         <button class="btn btn=primary" v-on:click="closeHazure">閉じる</button>
@@ -239,7 +239,7 @@
                                 さらに、src= に、明示的に「v-bind:」と接頭語をつける（省略可）
                                 参照⇒https://www.web-dev-qa-db-ja.com/ja/javascript/vuejs-img-src%E5%A4%89%E6%95%B0%E3%81%A8%E3%83%86%E3%82%AD%E3%82%B9%E3%83%88%E3%82%92%E9%80%A3%E7%B5%90%E3%81%99%E3%82%8B/827523891/
                         -->
-                        <img class="card-img" v-bind:src="'/static/TreasureBoxOpen'+current_stege_for_treasurebox+'.gif'">
+                        <img class="card-img" v-bind:src="'/static/TreasureBoxOpen'+current_stege_for_treasurebox+'.gif?20230123'">
                     </div>
                     <div class="form-group">
                         <button class="btn btn=primary" v-on:click="closeTreasureBox">閉じる</button>
@@ -538,5 +538,5 @@ new Vue({
 {% endblock%}
 
 {% block footer%}
-Copyright 2023 <img src ="/static/logo.jpg"/>
+Copyright 2023 <img src ="/static/logo.jpg?20230123"/>
 {% endblock%}
