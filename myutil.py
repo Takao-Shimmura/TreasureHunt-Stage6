@@ -179,7 +179,7 @@ def get_data_from_table_object(gr_st,nm,tbnm):
         except NoResultFound:
             res = False
     elif tbnm=='mydata':
-        if gr_st=='admin':
+        if gr_st=='admin' or gr_st=='public':
             try:
                 user_group_data = ses.query(Mydata).all()
                 res = get_by_list(user_group_data)

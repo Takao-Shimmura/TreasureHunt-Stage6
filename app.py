@@ -86,7 +86,7 @@ def getMsg():
     # 入力履歴を返してもらう
     res = get_data_from_table_object(group,nameid,tablename)
 
-    if session['name']=='admin':
+    if session['name']=='admin' or session['name']=='public':
         current_stege=''
         seikai_flg=''
         cleared_user_name=''
@@ -257,5 +257,5 @@ def delMsg():
 
 if __name__=='__main__':
     app.debug = True
-    app.run(host='localhost') #ローカルホスト接続時
-    #app.run(host='0.0.0.0') #サーバにデプロイ時
+    #app.run(host='localhost') #ローカルホスト接続時
+    app.run(host='0.0.0.0') #サーバにデプロイ時
