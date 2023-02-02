@@ -44,9 +44,9 @@ def login_post():
     group=request.form.get('group_name')
     nameid=request.form.get('name_id')
     tablename='userid'
-    #pprint.pprint('group.app={}'.format(group+','+nameid))
-    #dic1=get_data_from_table_object(group)
+    #　↓ここから↓　再ログインしたときに、現在どのステージにいるかを知るために、クリアタイムスタンプを検索する
     res=get_data_from_table_object(group,nameid,tablename,)
+    
     if res:
         flg='True'
         session['name'] = res['name']
@@ -54,13 +54,9 @@ def login_post():
         session['group'] = res['group']
         now_stage=0
         for i in range(6):
-            pprint.pprint('st'+str(i+1)+'_finish_timestamp ={}'.format(res['st'+str(i+1)+'_finish_timestamp'] ))
-            
             if res['st'+str(i+1)+'_finish_timestamp'] != 'None' :
                 now_stage=i+1
         session['stage'] = now_stage+1
-        pprint.pprint('session[stage]  ={}'.format(session['stage'] ))
-
 
     else:
         flg='False'
@@ -68,39 +64,40 @@ def login_post():
         session['user_id'] =''
         session['group'] = ''
     
-    #pprint.pprint('session[user_id,group]={}'.format(str(session['user_id']) +','+session['group']))        
+    #　↑ここまで↑　再ログインしたときに、現在どのステージにいるかを知るために、クリアタイムスタンプを検索する
     return jsonify(flg,session['name'],session['group'],session['user_id'],session['stage'] )
 
 # get messages.
 @app.route('/messages',methods=['POST'])
 def getMsg():
-    # ↓↓　ステージをクリアしたユーザー名を「仮に」入れておく→送信エラー防止のため
+    # ↓ここから↓　ステージをクリアしたユーザー名を「仮に」入れておく→送信エラー防止のため
     cleared_user_name=''
-
+    current_stege=str(session['stage'] )
+    # ↓　ここのgroupやnameidは、入力履歴の入っているresインスタンスを呼び出すときや、
+    # 現在のステージ位置を知るためのres2インスタンスを呼び出すときにも必要
     group=session['group'] 
     nameid=session['name']
+
     tablename='mydata'
-    #　pprint.pprint('getMsg.app={}'.format(group+','+nameid))
-    #dic1=get_data_from_table_object(group)
+
     # ↓↓　myutil内のget_data_from_table_object()関数 を呼び出して、
     # 入力履歴を返してもらう
     res = get_data_from_table_object(group,nameid,tablename)
-
+    
     if session['name']=='admin' or session['name']=='public':
         current_stege=''
         seikai_flg=''
         cleared_user_name=''
     else:
-        # ↓↓　現在のステージNoを送信する
-        current_stege=str(session['stage'])
+
         # ↓↓　myutil内のget_data_from_table_object()関数 を呼び出して、
         # stageのkey(正解)を返してもらう
         
         if current_stege!='7':#ステージ6もクリアしたならば、seikai_flg=''にしてフォアグラウンドに返す
             gr_st=str(session['stage'] )
-            nameid='key'
+            name_id='key'
             tablename='stage_key'
-            ans = get_data_from_table_object(gr_st,nameid,tablename)
+            ans = get_data_from_table_object(gr_st,name_id,tablename)
             # ↓↓　まったく投稿がないときは、最新の投稿（res[len(res)-1]）自体に中身がないので、
             # if ans['key']==res[len(res)-1]['input_key']:節でエラーが出てしまう。
             # それを回避するために、まずは無投稿でないことを確認する。
@@ -123,15 +120,14 @@ def getMsg():
                         # ↓↓　とりだした辞書から、ステージをクリアした時刻を引き出し、.fromisoformat()　メソッドにて
                         # ISO8601形式の文字列⇒時刻　へと変換する
                         # 参照⇒https://note.nkmk.me/python-datetime-isoformat-fromisoformat/
-                        pprint.pprint('clear_name={}'.format(timestamp_Dic_from_userdatum['name']))
+                        #pprint.pprint('clear_name={}'.format(timestamp_Dic_from_userdatum['name']))
                         #pprint.pprint('time_stamp={}'.format(timestamp_Dic_from_userdatum['time_stamp']))
                         claer_time = datetime.datetime.fromisoformat(timestamp_Dic_from_userdatum['time_stamp'] )
                         flg = datetime.datetime.now(pytz.timezone('Asia/Tokyo')) - claer_time
+                        #pprint.pprint('time_flg={}'.format(flg))
                         if flg < datetime.timedelta(seconds=10):
                             seikai_flg='atari'
-                            # ↓↓　正解した時は、ステージNoを一つプラスしておく
-                            session['stage'] = session['stage']  +1
-                            current_stege=str(session['stage'])
+                            
                         else:
                             seikai_flg=''
                     else:
@@ -141,7 +137,22 @@ def getMsg():
             else:
                 seikai_flg=''
         else:
-             seikai_flg=''
+            
+            seikai_flg=''
+    # ↓ここから↓　現在のステージNoを毎回、user_idテーブルに問い合わせて、ゲットする
+        # ↓↓　スマホがスリーブから復帰後に、ステージNoが更新されないエラーを回避するため
+
+        tablename='userid'
+        res2=get_data_from_table_object(group,nameid,tablename,)
+
+        now_stage=0
+        for i in range(6):
+            if res2['st'+str(i+1)+'_finish_timestamp'] != 'None' :
+                now_stage=i+1
+        session['stage'] = now_stage+1
+
+        current_stege=str(session['stage'])
+        # ↑ここまで↑　現在のステージNoを毎回、user_idテーブルに問い合わせて、ゲットする
 
     return jsonify(res,seikai_flg,current_stege,cleared_user_name) 
 
