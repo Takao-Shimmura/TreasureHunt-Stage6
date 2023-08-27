@@ -77,12 +77,13 @@ CREATE TABLE "stage_key" (
 );
 
 
-テーブルにCSVデータをインポートするコマンド
+テーブルにCSVデータをインポートするコマンド(コマンドプロンプトから　herokuへ行う時)
 
 
-\copy mydata from 'C:\Py\FlaskSampleP68\flask_TreasureHunting_PostgreSQL_app/mydata.csv' with csv encoding 'utf8' Header
-\copy stage_key from 'C:\Py\FlaskSampleP68\flask_TreasureHunting_PostgreSQL_app/stage_key.csv' with csv encoding 'utf8' Header
-\copy userid from 'C:\Py\FlaskSampleP68\flask_TreasureHunting_PostgreSQL_app/userid.csv' with csv encoding 'utf8' Header
+
+\copy mydata from 'C:\Py\FlaskSampleP68\flask_ICM_SupplementaryClass_sqilte_app/mydata.csv' with csv encoding 'utf8' Header
+\copy stage_key from 'C:\Py\FlaskSampleP68\flask_ICM_SupplementaryClass_sqilte_app/stage_key.csv' with csv encoding 'utf8' Header
+\copy userid from 'C:\Py\FlaskSampleP68\flask_ICM_SupplementaryClass_sqilte_app/userid.csv' with csv encoding 'utf8' Header
 
 
 テーブルのオブジェクトごと削除コマンド
